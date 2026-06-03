@@ -14,58 +14,54 @@
 
         html {
             scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
             overflow-y: scroll;
             height: 100%;
         }
 
         body {
             background: #f7f2ea;
+            background-image: 
+                linear-gradient(165deg, transparent 48%, rgba(180, 150, 110, 0.1) 48%, rgba(180, 150, 110, 0.1) 52%, transparent 52%),
+                linear-gradient(195deg, transparent 48%, rgba(180, 150, 110, 0.06) 48%, rgba(180, 150, 110, 0.06) 52%, transparent 52%);
             font-family: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
             color: #3d3227;
             line-height: 1.4;
             min-height: 100%;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Секция — всегда ровно на высоту экрана */
-        .section {
-            height: 100vh;
-            height: 100dvh; /* динамический viewport height */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            scroll-snap-align: start;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .section::before {
-            content: "";
-            position: absolute;
-            inset: 0;
+        .bg-branch {
+            position: fixed;
             pointer-events: none;
             z-index: 0;
-            background-image: 
-                radial-gradient(ellipse at 35% 30%, rgba(240, 225, 200, 0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 65%, rgba(225, 205, 175, 0.25) 0%, transparent 50%);
+            opacity: 0.15;
+        }
+        .branch-tl {
+            top: -20px; left: -10px;
+            width: 180px; height: 250px;
+            transform: rotate(-10deg);
+        }
+        .branch-br {
+            bottom: -30px; right: -20px;
+            width: 200px; height: 240px;
+            transform: rotate(15deg);
         }
 
         .accent-line {
             position: fixed;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.3;
+            opacity: 0.35;
         }
         .accent-line-1 {
             top: 8%; left: 5%;
-            width: 80px; height: 1px;
+            width: 100px; height: 1px;
             background: #c4a87c;
             transform: rotate(-12deg);
         }
         .accent-line-2 {
             bottom: 12%; right: 6%;
-            width: 60px; height: 1px;
+            width: 80px; height: 1px;
             background: #c4a87c;
             transform: rotate(15deg);
         }
@@ -80,8 +76,18 @@
         }
         .accent-dot-1 { top: 12%; right: 15%; }
         .accent-dot-2 { bottom: 18%; left: 12%; }
+        .accent-dot-3 { top: 45%; left: 8%; }
 
-        /* Карточка — динамически сжимается */
+        .section {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+        }
+
         .card {
             position: relative;
             z-index: 2;
@@ -89,20 +95,21 @@
             max-width: 560px;
             background: #fffef9;
             border-radius: 1.8rem;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.05), 0 4px 15px rgba(120, 100, 70, 0.07);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04), 0 4px 15px rgba(120, 100, 70, 0.06);
             padding: clamp(1.2rem, 3vh, 2.2rem) clamp(1rem, 4vw, 2rem);
             border: 1px solid rgba(180, 160, 130, 0.2);
             text-align: center;
-            animation: fadeUp 0.9s ease-out;
-            /* Динамическое ограничение высоты */
+            animation: fadeUp 0.6s ease-out;
             max-height: 92vh;
             max-height: 92dvh;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         @keyframes fadeUp {
-            0% { opacity: 0; transform: translateY(20px); }
+            0% { opacity: 0; transform: translateY(15px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
@@ -114,7 +121,6 @@
             font-weight: 300;
             opacity: 0.65;
         }
-
         .names-block {
             display: flex;
             flex-direction: column;
@@ -137,7 +143,6 @@
             line-height: 1;
             margin: 0.05rem 0;
         }
-
         .date-block {
             font-size: clamp(1rem, 2.5vw, 1.4rem);
             font-weight: 350;
@@ -172,52 +177,16 @@
             gap: clamp(0.4rem, 1.5vw, 0.8rem);
             flex-wrap: wrap;
         }
-        .countdown-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 40px;
-        }
-        .countdown-number {
-            font-size: clamp(1.3rem, 3vw, 1.7rem);
-            font-weight: 400;
-            color: #5e4632;
-            line-height: 1;
-        }
-        .countdown-label {
-            font-size: 0.6rem;
-            font-weight: 400;
-            color: #a3927e;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 0.1rem;
-        }
-        .countdown-divider {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-            color: #c4a87c;
-            font-weight: 300;
-            opacity: 0.45;
-        }
+        .countdown-item { display: flex; flex-direction: column; align-items: center; min-width: 40px; }
+        .countdown-number { font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 400; color: #5e4632; line-height: 1; }
+        .countdown-label { font-size: 0.6rem; font-weight: 400; color: #a3927e; text-transform: uppercase; letter-spacing: 1px; margin-top: 0.1rem; }
+        .countdown-divider { font-size: clamp(1rem, 2.5vw, 1.3rem); color: #c4a87c; font-weight: 300; opacity: 0.45; }
 
-        .divider {
-            width: 30px;
-            height: 1px;
-            background: #d3c1b0;
-            margin: 0.8rem auto;
-            opacity: 0.5;
-        }
-
-        .section-icon {
-            font-size: clamp(1.4rem, 3.5vw, 1.8rem);
-            margin-bottom: 0.3rem;
-        }
+        .divider { width: 30px; height: 1px; background: #d3c1b0; margin: 0.8rem auto; opacity: 0.5; }
+        .section-icon { font-size: clamp(1.4rem, 3.5vw, 1.8rem); margin-bottom: 0.3rem; }
         .section-title {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #7a6652;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 0.3rem;
+            font-size: 0.75rem; font-weight: 500; color: #7a6652;
+            letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.3rem;
         }
 
         .photo-modern {
@@ -231,151 +200,69 @@
             border: 1px solid rgba(180, 155, 120, 0.2);
             background: #f5efe6;
         }
-        .photo-modern img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+        .photo-modern img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .time-big {
-            font-size: clamp(1.4rem, 4vw, 1.8rem);
-            font-weight: 400;
-            color: #4d3827;
-            background: #efe6d9;
-            display: inline-block;
-            padding: 0.15rem 1.2rem;
-            border-radius: 2rem;
-            margin: 0.2rem 0;
+            font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 400;
+            color: #4d3827; background: #efe6d9;
+            display: inline-block; padding: 0.15rem 1.2rem;
+            border-radius: 2rem; margin: 0.2rem 0;
         }
-        .time-label {
-            font-size: clamp(0.8rem, 2vw, 0.95rem);
-            color: #8b7862;
-            font-style: italic;
-            margin-top: 0.1rem;
-        }
-
-        .address-big {
-            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
-            color: #5a4a3a;
-            line-height: 1.7;
-            margin: 0.3rem 0;
-        }
+        .time-label { font-size: clamp(0.8rem, 2vw, 0.95rem); color: #8b7862; font-style: italic; margin-top: 0.1rem; }
+        .address-big { font-size: clamp(0.95rem, 2.5vw, 1.15rem); color: #5a4a3a; line-height: 1.7; margin: 0.3rem 0; }
         .map-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.2rem;
-            color: #8b7a6b;
-            font-size: 0.78rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #f3ede7;
-            padding: 0.3rem 0.8rem;
-            border-radius: 1.2rem;
-            white-space: nowrap;
-            border: 1px solid #e0cfbb;
-            letter-spacing: 0.3px;
+            display: inline-flex; align-items: center; gap: 0.2rem;
+            color: #8b7a6b; font-size: 0.78rem; text-decoration: none;
+            cursor: pointer; transition: all 0.2s;
+            background: #f3ede7; padding: 0.3rem 0.8rem;
+            border-radius: 1.2rem; white-space: nowrap;
+            border: 1px solid #e0cfbb; letter-spacing: 0.3px;
         }
         .map-link:hover { background: #e8dbcb; color: #5e4632; }
 
         .dress-code-block {
-            background: #f6efe8;
-            border-radius: 1.2rem;
+            background: #f6efe8; border-radius: 1.2rem;
             padding: clamp(0.8rem, 2vh, 1.1rem) clamp(0.8rem, 3vw, 1.2rem);
-            border: 1px solid #e8dbcb;
-            margin-top: 0.2rem;
+            border: 1px solid #e8dbcb; margin-top: 0.2rem;
         }
-        .dress-code-icons {
-            font-size: 1rem;
-            opacity: 0.5;
-            letter-spacing: 3px;
-            margin-bottom: 0.3rem;
-        }
+        .dress-code-icons { font-size: 1rem; opacity: 0.5; letter-spacing: 3px; margin-bottom: 0.3rem; }
 
         .gift-block {
-            background: #fdf9f3;
-            border-radius: 1.2rem;
+            background: #fdf9f3; border-radius: 1.2rem;
             padding: clamp(0.8rem, 2vh, 1.1rem) clamp(0.8rem, 3vw, 1.2rem);
-            border: 1px dashed #dccbb8;
-            margin-top: 0.2rem;
+            border: 1px dashed #dccbb8; margin-top: 0.2rem;
         }
-        .gift-divider {
-            width: 20px;
-            height: 1px;
-            background: #d3c1b0;
-            margin: 0.5rem auto;
-        }
-
-        .section-text {
-            font-size: clamp(0.9rem, 2.5vw, 1.15rem);
-            color: #5a4a3a;
-            line-height: 1.6;
-            font-style: italic;
-        }
+        .gift-divider { width: 20px; height: 1px; background: #d3c1b0; margin: 0.5rem auto; }
+        .section-text { font-size: clamp(0.9rem, 2.5vw, 1.15rem); color: #5a4a3a; line-height: 1.6; font-style: italic; }
 
         .contact-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-family: inherit;
-            font-size: clamp(0.85rem, 2vw, 0.95rem);
-            font-weight: 350;
-            color: #8b7a6b;
-            text-decoration: none;
-            letter-spacing: 0.5px;
-            transition: all 0.25s;
-            padding: 0.4rem 1.2rem;
-            border-radius: 1.5rem;
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-family: inherit; font-size: clamp(0.85rem, 2vw, 0.95rem);
+            font-weight: 350; color: #8b7a6b; text-decoration: none;
+            letter-spacing: 0.5px; transition: all 0.25s;
+            padding: 0.4rem 1.2rem; border-radius: 1.5rem;
             border: 1px solid rgba(180, 155, 125, 0.3);
-            background: transparent;
-            cursor: pointer;
-            margin-top: 0.6rem;
+            background: transparent; cursor: pointer; margin-top: 0.6rem;
         }
-        .contact-link:hover {
-            color: #5e4632;
-            border-color: #b39678;
-            background: rgba(220, 200, 175, 0.2);
-        }
+        .contact-link:hover { color: #5e4632; border-color: #b39678; background: rgba(220, 200, 175, 0.2); }
 
         .footer-note {
             font-size: clamp(0.7rem, 2vw, 0.85rem);
-            color: #a3927e;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            opacity: 0.7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.2rem;
-            flex-wrap: nowrap;
-            margin-top: 0.8rem;
+            color: #a3927e; letter-spacing: 0.5px;
+            text-transform: uppercase; opacity: 0.7;
+            display: flex; align-items: center; justify-content: center;
+            gap: 0.2rem; flex-wrap: nowrap; margin-top: 0.8rem;
         }
-        .leaf-motif {
-            font-size: 1rem;
-            opacity: 0.45;
-            color: #a58e74;
-            flex-shrink: 0;
-        }
+        .leaf-motif { font-size: 1rem; opacity: 0.45; color: #a58e74; flex-shrink: 0; }
 
         /* Скролл-индикатор */
         .scroll-indicator {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            opacity: 0.45;
-            animation: bounce 2s infinite;
+            position: absolute; bottom: 12px; left: 50%;
+            transform: translateX(-50%); z-index: 3;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 0.2rem; opacity: 0.4; animation: bounce 2s infinite;
         }
-        .scroll-arrow {
-            font-size: 1rem;
-            color: #c4a87c;
-        }
+        .scroll-arrow { font-size: 1rem; color: #c4a87c; }
 
         @keyframes bounce {
             0%, 100% { transform: translateX(-50%) translateY(0); }
@@ -388,12 +275,23 @@
 </head>
 <body>
 
+    <svg class="bg-branch branch-tl" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 260 Q30 220 25 170 Q20 130 35 90 Q45 50 30 20" stroke="#a39070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="22" cy="210" rx="14" ry="4" fill="#a39070" transform="rotate(-20 22 210)"/>
+        <ellipse cx="38" cy="160" rx="12" ry="3.5" fill="#a39070" transform="rotate(-10 38 160)"/>
+    </svg>
+    <svg class="bg-branch branch-br" viewBox="0 0 220 260" xmlns="http://www.w3.org/2000/svg">
+        <path d="M200 30 Q180 70 185 120 Q190 160 175 200 Q165 240 180 280" stroke="#a39070" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="188" cy="75" rx="14" ry="4" fill="#a39070" transform="rotate(20 188 75)"/>
+        <ellipse cx="175" cy="130" rx="12" ry="3.5" fill="#a39070" transform="rotate(10 175 130)"/>
+    </svg>
     <div class="accent-line accent-line-1"></div>
     <div class="accent-line accent-line-2"></div>
     <div class="accent-dot accent-dot-1"></div>
     <div class="accent-dot accent-dot-2"></div>
+    <div class="accent-dot accent-dot-3"></div>
 
-    <!-- ═══════════ СЕКЦИЯ 1: ПРИВЕТСТВИЕ + ФОТО ═══════════ -->
+    <!-- СЕКЦИЯ 1: ПРИВЕТСТВИЕ + ФОТО -->
     <div class="section" id="section1">
         <div class="card">
             <div class="ornament-top">— ✦ —</div>
@@ -408,118 +306,69 @@
                 <span>пятница</span>
             </div>
             <div class="countdown" id="countdown">
-                <div class="countdown-item">
-                    <span class="countdown-number" id="days">00</span>
-                    <span class="countdown-label">дней</span>
-                </div>
+                <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">дней</span></div>
                 <span class="countdown-divider">:</span>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="hours">00</span>
-                    <span class="countdown-label">часов</span>
-                </div>
+                <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">часов</span></div>
                 <span class="countdown-divider">:</span>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="minutes">00</span>
-                    <span class="countdown-label">минут</span>
-                </div>
+                <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">минут</span></div>
                 <span class="countdown-divider">:</span>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="seconds">00</span>
-                    <span class="countdown-label">сек</span>
-                </div>
+                <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">сек</span></div>
             </div>
             <div class="divider"></div>
-            <div class="photo-modern">
-                <img src="https://i.ibb.co/ycYTPw5V/lera-145.jpg" alt="Игорь & Валерия">
-            </div>
+            <div class="photo-modern"><img src="https://i.ibb.co/ycYTPw5V/lera-145.jpg" alt="Игорь & Валерия"></div>
         </div>
         <div class="scroll-indicator"><div class="scroll-arrow">↓</div></div>
     </div>
 
-    <!-- ═══════════ СЕКЦИЯ 2: СБОР ГОСТЕЙ + ЦЕРЕМОНИЯ + АДРЕС ═══════════ -->
+    <!-- СЕКЦИЯ 2: СБОР ГОСТЕЙ + ЦЕРЕМОНИЯ + АДРЕС -->
     <div class="section" id="section2">
         <div class="card">
             <div class="section-icon">🥂</div>
             <div class="section-title">Сбор гостей</div>
             <div class="time-big">16:00</div>
             <div class="time-label">Начало нашего вечера</div>
-
             <div class="divider"></div>
-
             <div class="section-icon">🕊️</div>
             <div class="section-title">Церемония</div>
             <div class="time-big">17:00</div>
             <div class="time-label">Самый трогательный момент</div>
-
             <div class="divider"></div>
-
             <div class="section-icon">📍</div>
             <div class="section-title">Место проведения</div>
-            <div class="address-big">
-                <strong>Банкетный зал «Муза»</strong><br>
-                Москва, Гороховский переулок 19, стр. 4
-            </div>
-            <a class="map-link" href="https://yandex.ru/maps/?text=Москва,%20Гороховский%20переулок%2019%20строение%204" target="_blank">
-                🗺 Открыть на карте
-            </a>
+            <div class="address-big"><strong>Банкетный зал «Муза»</strong><br>Москва, Гороховский переулок 19, стр. 4</div>
+            <a class="map-link" href="https://yandex.ru/maps/?text=Москва,%20Гороховский%20переулок%2019%20строение%204" target="_blank">🗺 Открыть на карте</a>
         </div>
         <div class="scroll-indicator"><div class="scroll-arrow">↓</div></div>
     </div>
 
-    <!-- ═══════════ СЕКЦИЯ 3: ДРЕСС-КОД + ПОДАРКИ ═══════════ -->
+    <!-- СЕКЦИЯ 3: ДРЕСС-КОД + ПОДАРКИ -->
     <div class="section" id="section3">
         <div class="card">
             <div class="section-icon">🌿</div>
             <div class="section-title">Дресс-код</div>
             <div class="dress-code-block">
                 <div class="dress-code-icons">🌿 ✨ 🌿</div>
-                <div class="section-text">
-                    Пожалуйста, не беспокойтесь<br>
-                    о выборе цвета наряда —<br>
-                    достаточно выбрать не яркий образ,<br>
-                    а остальное — на ваш вкус.
-                </div>
+                <div class="section-text">Пожалуйста, не беспокойтесь<br>о выборе цвета наряда —<br>достаточно выбрать не яркий образ,<br>а остальное — на ваш вкус.</div>
             </div>
-
             <div class="divider"></div>
-
             <div class="section-icon">💝</div>
             <div class="section-title">Подарки</div>
             <div class="gift-block">
-                <div class="section-text">
-                    Самым главным подарком для нас будет<br>
-                    <strong>ваше хорошее настроение</strong><br>
-                    на нашей свадьбе!
-                </div>
+                <div class="section-text">Самым главным подарком для нас будет<br><strong>ваше хорошее настроение</strong><br>на нашей свадьбе!</div>
                 <div class="gift-divider"></div>
-                <div class="section-text" style="font-size: clamp(0.8rem, 2vw, 1rem);">
-                    А чтобы наши руки были свободны<br>
-                    для крепких объятий, будем рады<br>
-                    <strong>лёгким подаркам в конвертах</strong><br>
-                    и вашему творческому подходу<br>
-                    к поздравлениям! ✨
-                </div>
+                <div class="section-text" style="font-size: clamp(0.8rem, 2vw, 1rem);">А чтобы наши руки были свободны<br>для крепких объятий, будем рады<br><strong>лёгким подаркам в конвертах</strong><br>и вашему творческому подходу<br>к поздравлениям! ✨</div>
             </div>
         </div>
         <div class="scroll-indicator"><div class="scroll-arrow">↓</div></div>
     </div>
 
-    <!-- ═══════════ СЕКЦИЯ 4: КОНТАКТЫ ═══════════ -->
+    <!-- СЕКЦИЯ 4: КОНТАКТЫ -->
     <div class="section" id="section4">
         <div class="card">
             <div class="section-icon">✦</div>
-            <div class="section-text" style="font-size: clamp(1rem, 3vw, 1.25rem);">
-                Мы будем рады разделить<br>
-                этот день с вами
-            </div>
-            <a href="https://t.me/igor_valeria" target="_blank" class="contact-link">
-                ✉ Связаться с нами
-            </a>
-            <div class="footer-note">
-                <span class="leaf-motif">🌿</span>
-                <span>с любовью, Игорь & Валерия</span>
-                <span class="leaf-motif">🌿</span>
-            </div>
+            <div class="section-text" style="font-size: clamp(1rem, 3vw, 1.25rem);">Мы будем рады разделить<br>этот день с вами</div>
+            <a href="https://t.me/igor_valeria" target="_blank" class="contact-link">✉ Связаться с нами</a>
+            <div class="footer-note"><span class="leaf-motif">🌿</span><span>с любовью, Игорь & Валерия</span><span class="leaf-motif">🌿</span></div>
         </div>
     </div>
 
@@ -529,10 +378,7 @@
             function u() {
                 const n = new Date(), diff = d - n;
                 if (diff <= 0) {
-                    ['days','hours','minutes','seconds'].forEach(id => {
-                        const el = document.getElementById(id);
-                        if (el) el.textContent = '00';
-                    });
+                    ['days','hours','minutes','seconds'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = '00'; });
                     return;
                 }
                 document.getElementById('days').textContent = String(Math.floor(diff/(1000*60*60*24))).padStart(2,'0');
@@ -541,13 +387,6 @@
                 document.getElementById('seconds').textContent = String(Math.floor((diff%(1000*60))/1000)).padStart(2,'0');
             }
             u(); setInterval(u, 1000);
-        })();
-
-        (function() {
-            const sections = document.querySelectorAll('.section');
-            const last = sections[sections.length - 1];
-            const ind = last.querySelector('.scroll-indicator');
-            if (ind) ind.style.display = 'none';
         })();
     </script>
 </body>
